@@ -5,7 +5,7 @@ const upload = require('../config/multer');
 const Application = require('../models/Application');
 const Job = require('../models/Job');
 const User = require('../models/User');
-const { verifyToken } = require('../middleware/auth');
+const { verifyToken } = require('../middleware/Auth');
 
 // Apply for job
 router.post('/apply-job/:jobId', verifyToken, upload.single('resume'), async (req, res) => {

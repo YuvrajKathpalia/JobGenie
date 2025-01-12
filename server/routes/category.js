@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../models/Category'); 
-const { verifyToken, verifyAdmin } = require('../middleware/auth'); 
+const { verifyToken, verifyAdmin } = require('../middleware/Auth'); 
 
 
 // Route to create a new category(only adminss can acesss)..

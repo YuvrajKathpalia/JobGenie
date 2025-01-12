@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Job = require('../models/Job');
 const Category = require('../models/Category'); 
-const { verifyToken, isEmployer } = require('../middleware/auth');
+const { verifyToken, isEmployer } = require('../middleware/Auth');
 
 //post new job..(for employers only..)
 

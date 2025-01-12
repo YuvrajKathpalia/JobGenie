@@ -16,8 +16,8 @@ mongoose.connect(uri)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error:', err));
 
-app.get("/", (req, res) => {
-  res.send("Hello");
+app.get("/api", (req, res) => {
+  res.send("Hellooo");
 });
 
 
