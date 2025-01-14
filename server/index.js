@@ -16,6 +16,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
 app.use(express.json());
 
 const uri = process.env.MONGO_URI;
@@ -42,11 +43,17 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/profile' , profileRoutes);
 
-const port = process.env.PORT || 1000;
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
+const port = process.env.PORT || 1000;
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
 
 module.exports=app;
