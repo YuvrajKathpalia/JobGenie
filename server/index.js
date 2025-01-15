@@ -8,13 +8,7 @@ dotenv.config();
 const app = express();
 
 // Remove trailing slashes from origins
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://biotech-trek.vercel.app'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
