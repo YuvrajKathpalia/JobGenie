@@ -1,25 +1,30 @@
 import { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (login(email, password)) {
+    setError("");
+    
+    const success = await login(email, password);
+    if (success) {
       navigate("/jobs");
     } else {
-      alert("Invalid credentials");
+      setError("Invalid credentials");
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6">Login</h2>
+      {error && <div className="mb-4 text-red-500">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
@@ -43,7 +48,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
         >
           Login
         </button>
@@ -51,5 +56,4 @@ const Login = () => {
     </div>
   );
 };
-
 export default Login;

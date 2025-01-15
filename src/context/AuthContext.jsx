@@ -1,44 +1,85 @@
-import { createContext, useState, useContext } from "react";
 
-const AuthContext = createContext(null);
+import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 
-const DUMMY_USERS = [
-  {
-    email: "test@test.com",
-    password: "password123",
-  },
-];
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const register = (email, password) => {
-    if (DUMMY_USERS.find((u) => u.email === email)) {
-      alert("Email already registered");
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
+
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/login', {
+        email,
+        password,
+      });
+
+      const { token, id, role } = response.data;
+      
+      setUser({ id, role });
+      setToken(token);
+      
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify({ id, role }));
+      
+      return true;
+    } catch (error) {
+      console.error('Login error:', error.response?.data?.msg || error.message);
       return false;
     }
-    DUMMY_USERS.push({ email, password });
-    return true;
   };
-  const login = (email, password) => {
-    const validUser = DUMMY_USERS.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (validUser) {
-      setUser({ email });
+
+  const register = async (name, email, password, role) => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/signup', {
+        name,
+        email,
+        password,
+        role,
+      });
+
       return true;
+    } catch (error) {
+      console.error('Registration error:', error.response?.data?.msg || error.message);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
+  // Axios interceptor for adding token to requests
+  axios.interceptors.request.use(
+    (config) => {
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
