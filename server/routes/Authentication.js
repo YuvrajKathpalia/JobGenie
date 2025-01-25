@@ -59,7 +59,12 @@ router.post('/signup', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        console.time('loginProcess');
+
+        // Your login logic
+
+        const { email, password } = req.body;
   
     try {
         let user = await User.findOne({ email });
@@ -99,6 +104,51 @@ router.post('/login', async (req, res) => {
         console.error('Login Error:', err.message); 
         res.status(500).send('Server error');
     }
+        console.timeEnd('loginProcess');
+    } 
+    catch (error) {
+        console.error('Detailed Login Error:', error);
+    }
+    // const { email, password } = req.body;
+  
+    // try {
+    //     let user = await User.findOne({ email });
+    //     if (!user) {
+    //         return res.status(400).json({ msg: 'User does not exist' });
+    //     }
+  
+    //     const isMatch = await bcrypt.compare(password, user.password);
+    //     if (!isMatch) {
+    //         return res.status(401).json({ msg: 'Incorrect Password' });
+    //     }
+  
+    //     const payload = {
+    //         user: {
+    //             id: user.id,
+    //         },
+    //     };
+  
+    //     jwt.sign(
+    //         payload,
+    //         process.env.JWT_SECRET,
+    //         { expiresIn: '10d' },
+    //         (err, token) => {
+    //             if (err) {
+    //                 console.error('JWT Error:', err); 
+    //                 throw err;
+    //             }
+    //             res.status(200).json({
+    //                 token,
+    //                 id: user._id,
+    //                 role: user.role,
+    //                 msg: 'Login Successful'
+    //             });
+    //         }
+    //     );
+    // } catch (err) {
+    //     console.error('Login Error:', err.message); 
+    //     res.status(500).send('Server error');
+    // }
 });
 
 module.exports = router;
