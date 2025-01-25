@@ -7,31 +7,32 @@ dotenv.config();
 
 const app = express();
 
-
-app.use(cors({
-  origin: 'http://localhost:5173',  
+// CORS configuration for development
+const corsOptions = {
+  origin: 'http://localhost:5173',  // Frontend URL
   methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization'
-}));
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true  // Allow cookies or other credentials if needed
+};
 
-app.options('*', cors());  // This handles all OPTIONS requests
 
+app.use(cors(corsOptions));
+
+// This handles all OPTIONS requests (pre-flight requests)
+app.options('*', cors(corsOptions));  
 
 app.use(express.json());
 
 // MongoDB connection
-
 const uri = process.env.MONGO_URI;
-
 
 mongoose.connect(uri, { 
   useNewUrlParser: true, 
   useUnifiedTopology: true, 
-  serverSelectionTimeoutMS: 20000
+  serverSelectionTimeoutMS: 40000
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
-
 
 // Test route
 app.get("/", (req, res) => {
@@ -44,7 +45,6 @@ const jobRoutes = require('./routes/job');
 const categoryRoutes = require('./routes/category');
 const applicationRoutes = require('./routes/application');
 const profileRoutes = require('./routes/profile');
-
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -59,9 +59,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-
-const port = process.env.PORT;
-
+const port = process.env.PORT || 3000; 
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
