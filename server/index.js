@@ -23,11 +23,11 @@ app.use(express.json());
 
 const uri = process.env.MONGO_URI;
 
-const mongoose = require('mongoose');
+
 mongoose.connect(uri, { 
   useNewUrlParser: true, 
   useUnifiedTopology: true, 
-  serverSelectionTimeoutMS: 10000
+  serverSelectionTimeoutMS: 20000
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
