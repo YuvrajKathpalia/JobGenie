@@ -22,9 +22,16 @@ app.use(express.json());
 // MongoDB connection
 
 const uri = process.env.MONGO_URI;
-mongoose.connect(uri)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+
+const mongoose = require('mongoose');
+mongoose.connect(uri, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true, 
+  serverSelectionTimeoutMS: 10000
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.log('MongoDB connection error:', err));
+
 
 // Test route
 app.get("/", (req, res) => {
