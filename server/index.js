@@ -7,8 +7,13 @@ dotenv.config();
 
 const app = express();
 
-// Remove trailing slashes from origins
-app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:5174',  // Frontend's URL
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization'
+}));
+
 app.use(express.json());
 
 // MongoDB connection
