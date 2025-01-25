@@ -6,24 +6,26 @@ import Navbar from "./components/layout/Navbar";
 import Profile from "./components/profile/Profile";
 import Register from "./components/auth/Register";
 import ApplicationList from "./components/applications/ApplicationList";
-
+import { ThemeProvider } from "./context/ThemeContext";
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
-        <div>
-          <Navbar />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/jobs" element={<JobList />} />
-            <Route path="/applications" element={<ApplicationList />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/" element={<JobList />} />
-          </Routes>
-        </div>
-      </AuthProvider>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AuthProvider>
+          <div>
+            <Navbar />
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/jobs" element={<JobList />} />
+              <Route path="/applications" element={<ApplicationList />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/" element={<JobList />} />
+            </Routes>
+          </div>
+        </AuthProvider>
+      </Router>
+    </ThemeProvider>
   );
 };
 
