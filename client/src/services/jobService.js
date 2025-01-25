@@ -1,7 +1,7 @@
-
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api';
+
+//const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const jobService = {
   async getAllJobs(filters = {}) {
@@ -15,7 +15,7 @@ export const jobService = {
       if (filters.workExperience) queryParams.append('workExperience', filters.workExperience);
       if (filters.dateOfPosting) queryParams.append('dateOfPosting', filters.dateOfPosting);
 
-      const response = await axios.get(`${API_URL}/jobs/view-jobs?${queryParams}`);
+      const response = await axios.get(`https://bcknddd.vercel.app/api/jobs/view-jobs?${queryParams}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching jobs:', error);
@@ -25,7 +25,7 @@ export const jobService = {
 
   async getCategories() {
     try {
-      const response = await axios.get(`${API_URL}/categories`);
+      const response = await axios.get(`https://bcknddd.vercel.app/api/categories`);
       return response.data;
     } catch (error) {
       console.error('Error fetching categories:', error);

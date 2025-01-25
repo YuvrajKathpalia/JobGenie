@@ -1,6 +1,8 @@
-
 import { createContext, useContext, useState } from 'react';
 import axios from 'axios';
+
+// Use environment variable for the backend URL
+//const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const AuthContext = createContext();
 
@@ -13,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await axios.post(`https://bcknddd.vercel.app/api/auth/login`, {
         email,
         password,
       });
@@ -35,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password, role) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/signup', {
+      const response = await axios.post(`https://bcknddd.vercel.app/api/auth/signup`, {
         name,
         email,
         password,
